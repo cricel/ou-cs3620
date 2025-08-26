@@ -301,7 +301,8 @@ def run_benchmark(num_students: int = 500_000, num_courses: int = 20_000, avg_en
     print(f"Students: {len(students):,} | Courses: {len(courses):,} | Enrollments: {len(enrollments):,}")
 
     if use_file_backed:
-        data_dir = os.path.join(os.getcwd(), "data")
+        tmp_dir = os.path.join(os.getcwd(), "tmp")
+        data_dir = os.path.join(tmp_dir, "data")
         print(f"\nWriting CSV files to {data_dir}...")
         t0 = time.perf_counter()
         write_csv_files(data_dir, students, courses, enrollments)
@@ -309,7 +310,7 @@ def run_benchmark(num_students: int = 500_000, num_courses: int = 20_000, avg_en
 
         print("Building SQLite FILE database with indexes...")
         t0 = time.perf_counter()
-        sql_store = SQLiteStore(students, courses, enrollments, db_path=os.path.join(os.getcwd(), "demo.db"))
+        sql_store = SQLiteStore(students, courses, enrollments, db_path=os.path.join(tmp_dir, "demo.db"))
         print(f"Built DB in {time.perf_counter() - t0:.4f}s")
 
         py_file_store = PythonFileStore(data_dir)
